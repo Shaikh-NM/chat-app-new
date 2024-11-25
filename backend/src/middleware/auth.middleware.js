@@ -11,7 +11,6 @@ export const protectRoute = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
     if (!decoded) {
       return res.status(400).json({
         message: "Unauthorized - Invalid Token",

@@ -1,14 +1,12 @@
 import { useRef, useState } from "react";
-import toast from "react-hot-toast";
-import { Image, Send, X } from "lucide-react";
-
 import { useChatStore } from "../store/useChatStore";
+import { Image, Send, X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-
   const { sendMessage } = useChatStore();
 
   const handleImageChange = (e) => {
@@ -27,26 +25,25 @@ const MessageInput = () => {
 
   const removeImage = () => {
     setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!text.trim() && !imagePreview) {
-      return;
-    }
+    if (!text.trim() && !imagePreview) return;
 
     try {
-      await sendMessage({ text: text.trim(), image: imagePreview });
-      setImagePreview(null);
+      await sendMessage({
+        text: text.trim(),
+        image: imagePreview,
+      });
+
+      // Clear form
       setText("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      setImagePreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.log("Failed to Send Message", error);
+      console.error("Failed to send message:", error);
     }
   };
 
@@ -109,5 +106,4 @@ const MessageInput = () => {
     </div>
   );
 };
-
 export default MessageInput;
